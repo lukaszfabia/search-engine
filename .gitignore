@@ -27,6 +27,7 @@ tmp/
 
 # Project build
 main
+tailwindcss
 *templ.go
 
 # OS X generated file

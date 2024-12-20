@@ -1,5 +1,8 @@
 # Simple Makefile for a Go project
 
+# Reload app
+go: build run
+
 # Build the application
 all: build test
 templ-install:

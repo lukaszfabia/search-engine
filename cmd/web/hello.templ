@@ -1,17 +1,75 @@
 package web
 
-templ HelloForm() {
-	@Base() {
-		<form hx-post="/hello" method="POST" hx-target="#hello-container">
-			<input class="bg-gray-200 text-black p-2 border border-gray-400 rounded-lg"id="name" name="name" type="text"/>
-			<button type="submit" class="bg-orange-500 hover:bg-orange-700 text-white py-2 px-4 rounded">Submit</button>
+
+templ Search() {
+	@Base() {	
+		<div class="text-center text-gray-50 max-w-max py-5">
+			<h1 class="font-extrabold text-3xl">Results of a quick implementation of search engine.</h1>
+			<p class="text-gray-300">On change there is <b>suggestion</b> and submit with search there's <b>match</b>.</p>
+		</div>
+
+		<form method="POST" class="flex max-w gap-3">
+			<input 
+				class="bg-slate-800 text-white p-2 border border-gray-600 rounded-lg w-full max-w-xl" 
+				required
+				placeholder="Your word..."
+				id="elem" 
+				name="elem" 
+				type="text"
+				hx-post="/match" 
+				autocomplete="off"
+				autofocus
+				hx-trigger="keyup changed" 
+				hx-target="#search-container" />
+
+			<button type="button"
+				class="w-20 h-15 text-center bg-blue-500 p-3 text-white hover:bg-blue-600 transition-all duration-300 ease-in-out rounded-xl shadow-xl"
+				hx-post="/search" 
+				hx-target="#search-container"
+				>
+				<i class="fa fa-search" aria-hidden="true"></i>
+			</button>
+
+			<button 
+				class="w-20 h-15 text-center bg-green-500 p-3 text-white hover:bg-green-600 transition-all duration-300 ease-in-out rounded-xl shadow-xl"
+				type="button"
+				hx-post="/add" 
+				hx-target="#search-container">
+				<i class="fa fa-plus" aria-hidden="true"></i>
+			</button>
 		</form>
-		<div id="hello-container"></div>
+
+		<div id="search-container" class="flex items-center justify-center py-20"></div>
 	}
+
 }
 
-templ HelloPost(name string) {
-	<div class="bg-green-100 p-4 shadow-md rounded-lg mt-6">
-		<p>Hello, { name }</p>
+templ Add(elem string) {
+	<div class="bg-slate-700 p-4 rounded-xl text-white">
+		<h1 class="font-extrabold text-3xl text-center"><span class="text-green-500">Successfully</span> added!</h1>
+		<p class="text-xl font-semibol text-left">Added word: <b>{ elem }</b></p>
+	</div>
+}
+
+templ FailedToAdd() {
+	<div class="bg-slate-700 p-4 rounded-xl text-white">
+		<h1 class="font-extrabold text-3xl text-center"><span class="text-red-500">Failed</span> to add!</h1>
+		<p class="text-xl font-semibol text-left">Error: <span>You can't add empty word</span></p>
+	</div>
+}
+
+templ Filter(suggestions []string) {
+	<div class="bg-slate-700 text-gray-200 p-4 rounded-lg shadow-lg">
+		if len(suggestions) == 0 {
+			<p class="text-gray-300">List is empty!</p>
+		} else {
+			<ul>
+				for _, s := range suggestions {
+					<li class="bg-slate-700 text-gray-200 p-4 rounded-lg shadow-lg">
+					Do you mean ? <b>{ s }</b>
+					</li>
+				}
+			</ul>
+		}
 	</div>
 }
